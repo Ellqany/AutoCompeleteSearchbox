@@ -15,12 +15,14 @@
         <div (click)='selectValue(s.name)' class='search-results '
              *ngFor="let s of Courses | searchFilter: getSearchValue()">
           <a class="form-group w3-row">
-            <p class="p-2 float-left">{{s.name}}</p>
-            <img src="{{s.imageUrl}}" class="float-right img-thumbnail"
-                 style="max-width:50px;max-height:50px;" />
+            <div class="form-inline">
+              <img src="{{s.imageUrl}}" class="img-thumbnail"
+                   style="max-width:50px;max-height:50px;" />
+              <p class="p-2">{{s.name}}</p>
+            </div>
           </a>
+        </div>
       </div>
-    </div>
   </div>
 </div>
 
