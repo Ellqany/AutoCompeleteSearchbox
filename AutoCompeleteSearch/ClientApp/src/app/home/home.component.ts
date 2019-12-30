@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent  implements OnInit {
+export class HomeComponent implements OnInit {
   stateForm: FormGroup;
   showDropDown = false;
   Courses: Course[];
@@ -17,13 +17,13 @@ export class HomeComponent  implements OnInit {
     http.get<Course[]>(baseUrl + 'api/Home').subscribe(result => {
       this.Courses = result;
     }, error => console.error(error));
-    this.initForm()
+    this.initForm();
   }
 
   initForm(): FormGroup {
     return this.stateForm = this.fb.group({
       search: [null]
-    })
+    });
   }
 
   ngOnInit() {
@@ -31,7 +31,7 @@ export class HomeComponent  implements OnInit {
   }
 
   selectValue(value) {
-    this.stateForm.patchValue({ "search": value });
+    this.stateForm.patchValue({ 'search': value });
     this.showDropDown = false;
   }
 

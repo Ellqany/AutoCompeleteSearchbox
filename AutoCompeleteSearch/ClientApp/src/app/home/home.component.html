@@ -1,30 +1,28 @@
 <div class="w3-container w3-center">
   <div class="d-flex justify-content-center">
-    <form [formGroup]='stateForm' class="form-inline" autocomplete="new-password" novalidate>
-      <input id='search' placeholder="Search for a Course"
-             formControlName='search' (click)=' openDropDown() '
-             class=' input-underline search-bar form-control' style="max-width:200px;" type='search'>
-      <button for="search" class="btn btn-outline-primary" disabled>
-        <i class='fa fa-search'></i>
-      </button>
+    <form [formGroup]='stateForm' autocomplete="new-password" novalidate>
+      <input id='search' placeholder="Search for a Course" formControlName='search' (blur)="closeDropDown()"
+        (click)='openDropDown()' class=' input-underline search-bar form-control' style="max-width:200px;"
+        type='search'>
     </form>
   </div>
 
-    <div class="d-flex justify-content-center">
-      <div *ngIf='showDropDown' class='search-drop-down '>
-        <div (click)='selectValue(s.name)' class='search-results '
-             *ngFor="let s of Courses | searchFilter: getSearchValue()">
-          <a class="form-group w3-row">
-            <p class="p-2 float-left">{{s.name}}</p>
-            <img src="{{s.imageUrl}}" class="float-right img-thumbnail"
-                 style="max-width:50px;max-height:50px;" />
-          </a>
+  <div class="d-flex justify-content-center">
+    <div *ngIf='showDropDown' class='search-drop-down '>
+      <div (click)='selectValue(s.name)' class='search-results '
+        *ngFor="let s of Courses | searchFilter: getSearchValue()">
+        <a class="form-group w3-row">
+          <div class="form-inline">
+            <img src="{{s.imageUrl}}" class="img-thumbnail" style="max-width:50px;max-height:50px;" />
+            <p class="p-2">{{s.name}}</p>
+          </div>
+        </a>
       </div>
     </div>
   </div>
 </div>
 
-<div class="w3-container w3-margin" (click)="closeDropDown()">
+<div class="w3-container w3-margin">
 
   <p *ngIf="!Courses"><em>Sorry but there is no courses assigned yet.</em></p>
 
