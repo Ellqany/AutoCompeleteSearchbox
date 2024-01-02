@@ -1,24 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using AutoCompeleteSearch.Extentions;
+using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
 
-namespace AutoCompeleteSearch
+string path = Directory.GetCurrentDirectory();
+Log.Logger = SerilogConfiguration.Configure(path);
+
+try
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+    var builder = WebApplication.CreateSlimBuilder(args);
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+    builder.WebHost.UseKestrelHttpsConfiguration();
+    builder.WebHost.UseQuic();
+
+    // Add services to the container.
+    builder.Services.AddMainServices();
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
+
+    app.UseHsts();
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    });
+    app.UseRouting();
+    app.UseWebAppCors();
+    app.MapControllers();
+    app.MapRazorPages();
+
+    Log.Information("Starting up AutoCompleate Server");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "An error occurred while migrating or seeding the database.");
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
 }

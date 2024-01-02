@@ -13,7 +13,7 @@
         *ngFor="let s of Courses | searchFilter: getSearchValue()">
         <a class="form-group w3-row">
           <div class="form-inline">
-            <img src="{{s.imageUrl}}" class="img-thumbnail" style="max-width:50px;max-height:50px;" />
+            <img src="{{s.imageUrl}}" class="img-thumbnail" alt="imageUrl" style="max-width:50px;max-height:50px;" />
             <p class="p-2">{{s.name}}</p>
           </div>
         </a>

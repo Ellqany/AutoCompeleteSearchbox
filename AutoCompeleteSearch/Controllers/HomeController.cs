@@ -1,29 +1,27 @@
-﻿using AutoCompeleteSearch.Models;
+using AutoCompeleteSearch.Models;
+using AutoCompeleteSearch.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-namespace AutoCompeleteSearch.Controllers
+namespace AutoCompeleteSearch.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class HomeController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class HomeController : ControllerBase
-    {
-        #region Private Variables
-        readonly ICourseRepository CourseRepository;
-        #endregion
+    #region Private Variables
+    private readonly ICourseRepository _courseRepository;
+    #endregion
 
-        #region Constractor
-        public HomeController(ICourseRepository courseRepository) =>
-            CourseRepository = courseRepository;
-        #endregion
+    #region Constractor
+    public HomeController(ICourseRepository courseRepository) => _courseRepository = courseRepository;
+    #endregion
 
-        [HttpGet]
-        public List<Course> GetCourses() => CourseRepository.GetCourses();
+    [HttpGet]
+    public IList<Course> GetCourses() => _courseRepository.GetCourses();
 
-        [HttpGet("{Id}")]
-        public Course GetCourse(int Id) => CourseRepository.GetCourse(Id);
+    [HttpGet("{id}")]
+    public Course? GetCourse(int id) => _courseRepository.GetCourse(id);
 
-        [HttpGet("{Search}", Name = nameof(SearchCourse))]
-        public List<Course> SearchCourse(string Search) => CourseRepository.SearchCourse(Search);
-    }
+    [HttpGet("Search/{search}", Name = nameof(SearchCourse))]
+    public IList<Course> SearchCourse(string search) => _courseRepository.SearchCourse(search);
 }
