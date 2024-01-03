@@ -3,20 +3,20 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
-  imports: [RouterLink, RouterLinkActive, NgClass],
-  standalone: true,
-  styleUrl: './nav-menu.component.scss'
+   selector: 'app-nav-menu',
+   templateUrl: './nav-menu.component.html',
+   imports: [RouterLink, RouterLinkActive, NgClass],
+   standalone: true,
+   styleUrl: './nav-menu.component.scss'
 })
 export class NavMenuComponent {
-  isExpanded = false;
+   isExpanded = false;
 
-  collapse() {
-    this.isExpanded = false;
-  }
+   collapse() {
+      this.isExpanded = false;
+   }
 
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
+   toggle() {
+      this.isExpanded = !this.isExpanded;
+   }
 }

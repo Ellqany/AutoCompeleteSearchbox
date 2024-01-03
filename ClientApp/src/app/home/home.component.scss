@@ -1,51 +1,33 @@
-.card-dimensions {
-  height: 162px;
-  width: 23%;
-}
-
-.card {
-  font-family: sans-serif;
-  font-size: 18px;
-  background: #D2D2D2;
-  margin-top: 10px;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.card-container {
-  justify-content: start;
-}
-
 .icon-pos {
-  position: absolute;
-  top: 25px;
-}
-
-.search-bar {
-  min-width: 348px;
-  text-indent: 30px !important;
-  box-sizing: border-box;
+   position: absolute;
+   top: 25px;
 }
 
 .search-drop-down {
-  position: absolute;
-  width: 30%;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 10;
-  background-color: #F6F6F6;
-  font-family: sans-serif;
-  opacity: 0.98;
+   z-index: 1000;
+   cursor: pointer;
+   padding: 10px;
+   background-color: #f5f5f5;
+   font-family: sans-serif;
+   opacity: 0.98;
+   max-height: 300px;
+   overflow-y: auto;
+   position: absolute;
+   left: 0;
+   right: 0;
 }
 
 .search-results {
-  padding: 10px;
+   padding: 4px;
+   font-size: 15px;
 }
 
-  .search-results:hover {
-    background: #707070;
-  }
+.search-results:hover {
+   background: #707070;
+   color: #fff;
+   font-size: 17px;
+}
 
 .color-purple {
-  color: #A550BC;
+   color: #a550bc;
 }
