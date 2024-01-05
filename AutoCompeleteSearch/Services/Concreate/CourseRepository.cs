@@ -55,9 +55,7 @@ public class CourseRepository : ICourseRepository
 
     public Course? GetCourse(int id) => _courses.Values.SingleOrDefault(x => x.Id == id);
 
-    public IList<Course> GetCourses() => _courses.Values.ToList();
-
-    public IList<Course> SearchCourse(string name) =>
-        _courses.Values.Where(x => x.Name!.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+    public IList<Course> GetCourses(string? name) =>
+        _courses.Values.Where(x => string.IsNullOrWhiteSpace(name) || x.Name!.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
 }

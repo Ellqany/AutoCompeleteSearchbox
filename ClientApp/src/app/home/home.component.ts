@@ -1,53 +1,40 @@
-import { Subject, takeUntil } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Course } from '../models/course.model';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { SearchFilterPipe } from '../shared/filter-pipe';
-import { SearchFormModel } from '../models/searchForm.model';
-import { ClickOutsideDirective } from '../shared/clickOutside.directive';
+import { CourseService } from '../services';
+import { ClickOutsideDirective } from '../directive';
+import { CourseModel, SearchFormModel } from '../models';
 
 @Component({
    selector: 'app-home',
    standalone: true,
-   imports: [CommonModule, ReactiveFormsModule, SearchFilterPipe, ClickOutsideDirective],
+   imports: [CommonModule, ReactiveFormsModule, ClickOutsideDirective],
    templateUrl: './home.component.html',
-   styleUrls: ['./home.component.scss']
+   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-   private ngUnsubscribe = new Subject();
+   private unsubscribe: Subscription[] = [];
    stateForm: FormGroup<SearchFormModel>;
    showDropDown = false;
-   Courses: Course[] = [];
-   baseUrl = 'https://localhost:5001/';
+   Courses = signal<CourseModel[]>([]);
 
-   constructor(private http: HttpClient, private fb: FormBuilder) {
+   constructor(private courseService: CourseService, private fb: FormBuilder) {
       this.stateForm = this.initForm();
    }
 
-   initForm(): FormGroup {
-      return this.fb.group<SearchFormModel>({
-         search: new FormControl('',
-            Validators.compose([
-               Validators.maxLength(100),
-            ]),
-         ),
-      });
-   }
-
    ngOnInit() {
-      this.http.get<Course[]>(this.baseUrl + 'api/Home').pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-         next: (result) => {
-            this.Courses = result;
-         },
-         error: (error) => console.error(error)
-      });
+      const getCourses = this.courseService.Search('').subscribe(courselist => {
+         this.Courses.set(courselist);
+      })
+
+      this.unsubscribe.push(getCourses);
    }
 
    selectValue(value: string) {
       this.stateForm.controls.search.setValue(value);
+      this.searchCourse();
       this.showDropDown = false;
    }
 
@@ -59,12 +46,25 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.showDropDown = true;
    }
 
-   getSearchValue() {
-      return this.stateForm.controls.search.value;
+   searchCourse() {
+      const getCourses = this.courseService.Search(this.stateForm.controls.search.value).subscribe(courselist => {
+         this.Courses.set(courselist);
+      })
+
+      this.unsubscribe.push(getCourses);
+   }
+
+   private initForm(): FormGroup {
+      return this.fb.group<SearchFormModel>({
+         search: new FormControl('',
+            Validators.compose([
+               Validators.maxLength(100),
+            ]),
+         ),
+      });
    }
 
    ngOnDestroy(): void {
-      this.ngUnsubscribe.next(null);
-      this.ngUnsubscribe.complete();
+      this.unsubscribe.forEach((sb) => sb.unsubscribe());
    }
 }

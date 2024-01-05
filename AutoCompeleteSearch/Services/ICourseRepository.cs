@@ -4,7 +4,6 @@ namespace AutoCompeleteSearch.Services;
 
 public interface ICourseRepository
 {
-    IList<Course> GetCourses();
+    IList<Course> GetCourses(string? name);
     Course? GetCourse(int id);
-    IList<Course> SearchCourse(string name);
 }

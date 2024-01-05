@@ -1,12 +1,20 @@
 <form [formGroup]="stateForm" class="container" clickOutside (clickOutside)="closeDropDown()">
-   <input id="search" placeholder="Search for a Course" formControlName="search" (click)="openDropDown()" class="form-control" type="search" />
+   <input
+      id="search"
+      placeholder="Search for a Course"
+      formControlName="search"
+      (click)="openDropDown()"
+      class="form-control"
+      type="search"
+      (keyup)="searchCourse()"
+   />
 
    <div style="position: relative" *ngIf="showDropDown">
       <div class="search-drop-down">
-         <div (click)="selectValue(s.name)" class="search-results" *ngFor="let s of Courses | searchFilter : getSearchValue()">
+         <div (click)="selectValue(s.name)" class="search-results" *ngFor="let s of Courses()">
             <a class="form-group w3-row">
-               <div class="form-inline">
-                  <img src="{{ s.imageUrl }}" class="img-thumbnail" alt="imageUrl" style="max-width: 50px; max-height: 50px" />
+               <div class="form-inline" style="display: inline-flex">
+                  <img src="{{ s.imageUrl }}" class="img-thumbnail" alt="imageUrl" style="max-width: 35px; max-height: 35px" />
                   <p class="p-2">{{ s.name }}</p>
                </div>
             </a>
@@ -19,7 +27,7 @@
    <p *ngIf="!Courses"><em>Sorry but there is no courses assigned yet.</em></p>
 
    <div *ngIf="Courses" class="w3-container">
-      <div *ngFor="let item of Courses | searchFilter : getSearchValue()" class="w3-content">
+      <div *ngFor="let item of Courses()" class="w3-content">
          <div class="w3-row w3-margin form-group w3-container">
             <div class="w3-quarter">
                <img src="{{ item.imageUrl }}" alt="{{ item.name }}" style="width: 100px; max-height: 200px" class="w3-image" />
